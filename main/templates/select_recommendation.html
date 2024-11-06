@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>추천 시나리오 선택</title>
+</head>
+<body>
+    <h1>추천된 시나리오 중 하나를 선택하세요</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">선택하기</button>
+    </form>
+
+    <h2>추천 시나리오 목록</h2>
+    <ul>
+        {% for recommendation in scenario_instance.recommendations %}
+            <li>{{ recommendation }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

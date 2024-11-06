@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>그림 그리기 동화책</title>
+    <style>
+        #drawingCanvas {
+            border: 1px solid #000;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h1>동화책 그림 그리기</h1>
+    <p>왼쪽에 텍스트를 보고 오른쪽에 그림을 그리세요!</p>
+
+    <canvas id="drawingCanvas" width="500" height="500"></canvas>
+    <button id="saveButton">그림 저장</button>
+
+    <script>
+        // 캔버스 설정
+        const canvas = document.getElementById("drawingCanvas");
+        const ctx = canvas.getContext("2d");
+        let drawing = false;
+
+        // 그리기 시작
+        canvas.addEventListener("mousedown", (event) => {
+            drawing = true;
+            ctx.beginPath(); // 새로운 경로 시작
+            ctx.moveTo(event.offsetX, event.offsetY); // 시작 위치 설정
+        });
+
+        // 그리기 중지
+        canvas.addEventListener("mouseup", () => {
+            drawing = false;
+        });
+
+        // 그리기 동작
+        canvas.addEventListener("mousemove", draw);
+
+        function draw(event) {
+            if (!drawing) return;
+            ctx.lineWidth = 3;
+            ctx.lineCap = "round";
+            ctx.strokeStyle = "black";
+            ctx.lineTo(event.offsetX, event.offsetY);
+            ctx.stroke();
+        }
+
+        // 그림 저장
+        document.getElementById("saveButton").addEventListener("click", () => {
+            const dataURL = canvas.toDataURL("image/png");
+            fetch("/save-image", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ image: dataURL })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) alert("그림이 저장되었습니다!");
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
+</body>
+</html>

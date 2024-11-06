@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>동화책 시나리오 입력</title>
+</head>
+<body>
+    <h1>동화책 시나리오 입력</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">시나리오 추천 받기</button>
+    </form>
+</body>
+</html>
